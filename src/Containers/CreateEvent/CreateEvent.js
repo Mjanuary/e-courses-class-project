@@ -149,7 +149,7 @@ class CreateVideoCourse extends Component {
           this.state.teacher.length <= 0
             ? this.props.user.names
             : this.state.teacher,
-        date: this.state.date,
+        date: new Date(this.state.date),
         status: true,
       })
       .then((res) => {

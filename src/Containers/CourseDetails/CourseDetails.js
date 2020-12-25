@@ -71,10 +71,10 @@ class CourseDetails extends Component {
 
           <div className="">
             <span className="badge bg-primary text-white">
-              <h4 className="m-0 p-2 d-inline-block">Category one</h4>
+              <h4 className="m-0 p-2 d-inline-block">{data.plan_type}</h4>
             </span>{" "}
             <span className="badge  bg-warning">
-              <h4 className="m-0 p-2  d-inline-block">Category one</h4>
+              <h4 className="m-0 p-2  d-inline-block">{data.category}</h4>
             </span>
             <div className="w-50 pt-3 pb-2">
               <h4 className="m-0 mb-2">

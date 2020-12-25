@@ -129,7 +129,8 @@ class Signup extends Component {
         gender: this.state.gender,
         dob: this.state.dob,
         created_date: new Date(),
-        admin: false
+        admin: false,
+        payment: null,
       })
       .then((res) => {
         // console.log({ res });

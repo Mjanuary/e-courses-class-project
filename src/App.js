@@ -29,9 +29,13 @@ import TimeTable from "./Containers/TimeTable/TimeTable";
 function App() {
   const [user, setUser] = useState(null);
   const [isAuthenticated, setisAuthenticated] = useState(false);
+  const [isPayed, setisPayed] = useState(null);
+  const [loading, seLoading] = useState(false);
 
   useEffect(() => {
     let user_account = localStorage.getItem("user_account");
+
+    // setisPayed
     if (user_account === null) {
       setisAuthenticated(false);
       setUser(null);
@@ -59,6 +63,7 @@ function App() {
         <Navigation
           user={user}
           isAuthenticated={isAuthenticated}
+          isPayed={isPayed}
           Logout={LogoutUser}
         />
         {user !== null && isAuthenticated === true && user.admin === true && (
@@ -76,6 +81,7 @@ function App() {
                 {...props}
                 user={user}
                 isAuthenticated={isAuthenticated}
+                isPayed={isPayed}
               />
             )}
           />
@@ -89,6 +95,7 @@ function App() {
                 {...props}
                 user={user}
                 isAuthenticated={isAuthenticated}
+                isPayed={isPayed}
               />
             )}
           />
@@ -102,6 +109,7 @@ function App() {
                 {...props}
                 user={user}
                 isAuthenticated={isAuthenticated}
+                isPayed={isPayed}
               />
             )}
           />
@@ -115,6 +123,8 @@ function App() {
                 {...props}
                 user={user}
                 isAuthenticated={isAuthenticated}
+                isPayed={isPayed}
+                LoginUser={LoginUser}
               />
             )}
           />
@@ -128,6 +138,7 @@ function App() {
                 {...props}
                 user={user}
                 isAuthenticated={isAuthenticated}
+                isPayed={isPayed}
               />
             )}
           />
@@ -141,6 +152,7 @@ function App() {
                 {...props}
                 user={user}
                 isAuthenticated={isAuthenticated}
+                isPayed={isPayed}
               />
             )}
           />
@@ -150,7 +162,12 @@ function App() {
             exact
             path="/blogs"
             render={(props) => (
-              <Blogs {...props} user={user} isAuthenticated={isAuthenticated} />
+              <Blogs
+                {...props}
+                user={user}
+                isAuthenticated={isAuthenticated}
+                isPayed={isPayed}
+              />
             )}
           />
 
@@ -164,6 +181,7 @@ function App() {
                 Login={LoginUser}
                 user={user}
                 isAuthenticated={isAuthenticated}
+                isPayed={isPayed}
               />
             )}
           />
@@ -177,6 +195,7 @@ function App() {
                 {...props}
                 user={user}
                 isAuthenticated={isAuthenticated}
+                isPayed={isPayed}
               />
             )}
           />
@@ -190,6 +209,7 @@ function App() {
                 {...props}
                 user={user}
                 isAuthenticated={isAuthenticated}
+                isPayed={isPayed}
               />
             )}
           />
@@ -203,6 +223,7 @@ function App() {
                 {...props}
                 user={user}
                 isAuthenticated={isAuthenticated}
+                isPayed={isPayed}
               />
             )}
           />
@@ -216,6 +237,7 @@ function App() {
                 {...props}
                 user={user}
                 isAuthenticated={isAuthenticated}
+                isPayed={isPayed}
               />
             )}
           />
@@ -224,7 +246,11 @@ function App() {
 
           <Route component={NotFound} />
         </Switch>
-        <Footer user={user} isAuthenticated={isAuthenticated} />
+        <Footer
+          user={user}
+          isAuthenticated={isAuthenticated}
+          isPayed={isPayed}
+        />
       </Router>
     </Fragment>
   );

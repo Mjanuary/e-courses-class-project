@@ -13,6 +13,10 @@ export class Courses extends Component {
   };
 
   componentDidMount = () => {
+    // login
+    if (this.props.isAuthenticated === false) {
+      this.props.history.push("/login");
+    }
     this.setState({
       loading: true,
       success: null,
@@ -59,9 +63,9 @@ export class Courses extends Component {
     return (
       <>
         <div>
-          <section className="jumbotron mt-n3 text-center">
+          <section className="p-2 text-primary mt-n3 text-center">
             <div className="container">
-              <h1 className="m-0 display-1">Blogs</h1>
+              <h1 className="m-0 display-1 font-weight-bold">Blogs</h1>
 
               {/* <p>
                 <Link to="#" className="btn btn-primary my-2">

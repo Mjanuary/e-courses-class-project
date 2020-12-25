@@ -37,7 +37,7 @@ const Login = (props) => {
           return setError("Username or password are incorect");
         } else {
           let user = { ...existsUser };
-          delete user.password;
+          // delete user.password;
           console.log("user is available");
           console.log(user);
           props.Login(user);

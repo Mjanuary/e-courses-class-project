@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { v4 as uuid4 } from "uuid";
 import Axios from "axios";
 import axios from "../../axios-api";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import dataClean from "../../assets/dataClean";
 //
 class Pricing extends Component {
@@ -11,7 +11,6 @@ class Pricing extends Component {
     user_loading: false,
     payment_loading: false,
     pricings: [],
-    loading: true,
     success: null,
     selected: { id: null },
     error_phone: "",
@@ -23,10 +22,20 @@ class Pricing extends Component {
     },
     payment_error: false,
     success: false,
+    transactionId: null,
+    check_payed_loading: false,
+    paymets_list: [],
+    user_has_payed: false,
+    all_payed_payments: [],
   };
 
   // data
   componentDidMount = () => {
+    // login
+    if (this.props.isAuthenticated === false) {
+      this.props.history.push("/login");
+    }
+    //
     axios
       .get("/pricing.json")
       .then((res) => {
@@ -36,12 +45,38 @@ class Pricing extends Component {
         } else {
           data = dataClean(res.data);
         }
-        this.setState({
-          loading: false,
-          // success: true,
-          error: null,
-          pricings: data,
-        });
+        // reading the data
+        axios
+          .get("/pricing.json")
+          .then((res) => {
+            // search the data
+            let payments_list = [];
+            if (res.data === null || this.state.transactionId === null) {
+              payments_list = [];
+            } else {
+              payments_list = dataClean(res.data).filter(
+                (itm) => itm.transactionId === this.state.transactionId
+              );
+            }
+            this.setState({
+              loading: false,
+              // success: true,
+              error: null,
+              pricings: data,
+              all_payed_payments: payments_list,
+            });
+          })
+          .catch((error) => {
+            console.log("Find request error");
+            console.log({ error });
+            //
+            this.setState({
+              loading: false,
+              // success: true,
+              error: null,
+              pricings: data,
+            });
+          });
 
         console.log({ data });
       })
@@ -68,6 +103,7 @@ class Pricing extends Component {
       payment_loading: true,
       user_loading: true,
       payment_error: false,
+      transactionId: transactionId,
     });
 
     Axios.post("https://opay-api.oltranz.com/opay/paymentrequest", {
@@ -130,6 +166,46 @@ class Pricing extends Component {
       .catch((error) => console.log({ error }));
   };
 
+  checkPayments = () => {
+    this.setState({
+      check_payed_loading: true,
+    });
+    axios
+      .get(`/payments_list.json`)
+      .then((res) => {
+        console.log({ check_payments: res });
+        let payments_list = [];
+        if (res.data === null || this.state.transactionId === null) {
+          payments_list = [];
+        } else {
+          payments_list = dataClean(res.data).filter(
+            (itm) => itm.transactionId === this.state.transactionId
+          );
+        }
+
+        let user_has_payed = false;
+        //
+        if (payments_list.length >= 1) {
+          this.props.isPayed(true);
+          user_has_payed = true;
+        }
+
+        // set the data to the state
+        this.setState({
+          check_payed_loading: false,
+          paymets_list: payments_list,
+          user_has_payed: user_has_payed,
+        });
+        //
+      })
+      .catch((error) => {
+        console.log({ error });
+        this.setState({
+          check_payed_loading: false,
+        });
+      });
+  };
+
   render() {
     if (this.state.loading === true) {
       return (
@@ -168,6 +244,116 @@ class Pricing extends Component {
         </div>
       );
     }
+    //
+    if (this.state.success === true) {
+      return (
+        <div className="container">
+          <div className="shadow-lg p-4 bg-white text-center zoomIn animated">
+            {this.state.user_has_payed === false ? (
+              <>
+                {this.state.check_payed_loading === true && (
+                  <div className="alert alert-success fadeIn animated infinite text-center">
+                    Loading...
+                  </div>
+                )}
+                <p>
+                  Payments has been sent to the device{" "}
+                  <b>{this.state.phone_number}</b> <br />
+                  Please confirm the payment check on the button below
+                </p>
+                <br />
+                <button
+                  className="btn btn-success btn-lg"
+                  onClick={() => this.checkPayments()}
+                >
+                  Check payments
+                </button>
+              </>
+            ) : (
+              <div className="p-4">
+                <h2 className="text-success mb-2">Payment done</h2>
+
+                {this.state.paymets_list.length >= 1 &&
+                  this.state.paymets_list.map((itm, i) => (
+                    <div className="m-2 border p-2 text-secondary" key={i}>
+                      chargeCommission:{" "}
+                      <b className="text-primary">{itm.chargeCommission}</b>{" "}
+                      <br />
+                      currency: <b className="text-primary">
+                        {itm.currency}
+                      </b>{" "}
+                      <br />
+                      paidAmount:{" "}
+                      <b className="text-primary">{itm.paidAmount}</b> <br />
+                      responseTimeStamp:{" "}
+                      <b className="text-primary">
+                        {itm.responseTimeStamp}
+                      </b>{" "}
+                      <br />
+                      spTransactionId:{" "}
+                      <b className="text-primary">{itm.spTransactionId}</b>{" "}
+                      <br />
+                      status: <b className="text-primary">{itm.status}</b>{" "}
+                      <br />
+                      statusCode:{" "}
+                      <b className="text-primary">{itm.statusCode}</b> <br />
+                      statusDescription:{" "}
+                      <b className="text-primary">
+                        {itm.statusDescription}
+                      </b>{" "}
+                      <br />
+                      transactionId:{" "}
+                      <b className="text-primary">{itm.transactionId}</b> <br />
+                      walletTransactionId:{" "}
+                      <b className="text-primary">
+                        {itm.walletTransactionId}
+                      </b>{" "}
+                      <br />
+                    </div>
+                  ))}
+              </div>
+            )}
+          </div>
+        </div>
+      );
+    }
+
+    // dadad
+    if (this.state.all_payed_payments.length >= 1) {
+      return (
+        <div className="container bg-white p-4">
+          <h1 className="m-0 text-center pt-4">Payments list</h1>
+          <br />
+          {this.state.all_payed_payments.length >= 1 &&
+            this.state.all_payed_payments.map((itm, i) => (
+              <div className="m-2 border p-2 text-secondary" key={i}>
+                chargeCommission:{" "}
+                <b className="text-primary">{itm.chargeCommission}</b> <br />
+                currency: <b className="text-primary">{itm.currency}</b> <br />
+                paidAmount: <b className="text-primary">
+                  {itm.paidAmount}
+                </b>{" "}
+                <br />
+                responseTimeStamp:{" "}
+                <b className="text-primary">{itm.responseTimeStamp}</b> <br />
+                spTransactionId:{" "}
+                <b className="text-primary">{itm.spTransactionId}</b> <br />
+                status: <b className="text-primary">{itm.status}</b> <br />
+                statusCode: <b className="text-primary">
+                  {itm.statusCode}
+                </b>{" "}
+                <br />
+                statusDescription:{" "}
+                <b className="text-primary">{itm.statusDescription}</b> <br />
+                transactionId:{" "}
+                <b className="text-primary">{itm.transactionId}</b> <br />
+                walletTransactionId:{" "}
+                <b className="text-primary">{itm.walletTransactionId}</b> <br />
+              </div>
+            ))}
+        </div>
+      );
+    }
 
     return (
       <>
@@ -175,14 +361,6 @@ class Pricing extends Component {
           <div className="container">
             <div className="alert alert-danger text-center">
               {this.state.response.description}
-            </div>
-          </div>
-        )}
-
-        {this.state.success === true && (
-          <div className="container">
-            <div className="alert alert-success text-center zoomIn animated">
-              Please confirm the money on your device and refresh the page
             </div>
           </div>
         )}
@@ -228,7 +406,7 @@ class Pricing extends Component {
                 </div>
                 <div className="card-body">
                   <h1 className="card-title pricing-card-title">
-                    ${itm.price} <small className="text-muted">/ mo</small>
+                    {itm.price}Frw <small className="text-muted">/ mo</small>
                   </h1>
 
                   <ul className="list-unstyled mt-3 mb-4">
@@ -251,9 +429,7 @@ class Pricing extends Component {
                   {itm.id === this.state.selected.id ? (
                     <div className="border shadow rounded p-2">
                       <div className="form-group">
-                        <label htmlFor="exampleInputEmail1">
-                          Email address
-                        </label>
+                        <label htmlFor="exampleInputEmail1">Phone number</label>
                         <input
                           type="number"
                           value={this.state.phone_number}
