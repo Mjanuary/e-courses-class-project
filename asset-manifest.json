@@ -1,0 +1,25 @@
+{
+  "files": {
+    "main.css": "/e-courses-class-project/static/css/main.7917d3e8.chunk.css",
+    "main.js": "/e-courses-class-project/static/js/main.33e7662b.chunk.js",
+    "main.js.map": "/e-courses-class-project/static/js/main.33e7662b.chunk.js.map",
+    "runtime-main.js": "/e-courses-class-project/static/js/runtime-main.5b024336.js",
+    "runtime-main.js.map": "/e-courses-class-project/static/js/runtime-main.5b024336.js.map",
+    "static/js/2.c729984f.chunk.js": "/e-courses-class-project/static/js/2.c729984f.chunk.js",
+    "static/js/2.c729984f.chunk.js.map": "/e-courses-class-project/static/js/2.c729984f.chunk.js.map",
+    "static/js/3.1a30b222.chunk.js": "/e-courses-class-project/static/js/3.1a30b222.chunk.js",
+    "static/js/3.1a30b222.chunk.js.map": "/e-courses-class-project/static/js/3.1a30b222.chunk.js.map",
+    "index.html": "/e-courses-class-project/index.html",
+    "static/css/main.7917d3e8.chunk.css.map": "/e-courses-class-project/static/css/main.7917d3e8.chunk.css.map",
+    "static/js/2.c729984f.chunk.js.LICENSE.txt": "/e-courses-class-project/static/js/2.c729984f.chunk.js.LICENSE.txt",
+    "static/media/error-image.89a0a1db.jpg": "/e-courses-class-project/static/media/error-image.89a0a1db.jpg",
+    "static/media/register-image.c0d9fe85.jpg": "/e-courses-class-project/static/media/register-image.c0d9fe85.jpg",
+    "static/media/success-image.eeef5424.jpg": "/e-courses-class-project/static/media/success-image.eeef5424.jpg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.5b024336.js",
+    "static/js/2.c729984f.chunk.js",
+    "static/css/main.7917d3e8.chunk.css",
+    "static/js/main.33e7662b.chunk.js"
+  ]
+}
