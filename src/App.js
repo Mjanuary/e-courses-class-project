@@ -242,7 +242,7 @@ function App() {
             )}
           />
 
-          <Route exact path="/" component={Homepage} />
+          <Route path="/" component={Homepage} />
 
           <Route component={NotFound} />
         </Switch>
